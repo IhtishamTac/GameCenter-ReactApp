@@ -1,14 +1,32 @@
 import { NavComp } from "../../components/NavComp";
 import defaultImg from "../../asset/example_game/v1/thumbnail.png";
+import Services from "../../api/service";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 const ManageGames = () => {
+    const token = localStorage.getItem('token');
+
+    const [games, setGames] = useState([]);
+    
+    const getCreated = () => {
+        Services.getCreatedGames(token).then((res)=>{
+            setGames(res.data.games);
+        }).catch((err)=>{
+            alert(err.response.data.message || err.response.data.status || 'Unknown Error');
+        });
+    }
+    useEffect(()=>{
+        getCreated();
+    },[token]);
+    if(!games) return (<h1>Loading...</h1>);
     return (
         <main>
             <NavComp />
             <div className="hero py-5 bg-light">
                 <div className="container">
-                    <a href="manage-games-form.html" className="btn btn-primary">
+                    <Link to={'/add-game'} className="btn btn-primary">
                         Add Game
-                    </a>
+                    </Link>
                 </div>
             </div>
 
@@ -26,36 +44,18 @@ const ManageGames = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                           {games.map((game, index)=>(
+                            <tr key={index}>
                                 <td><img src={defaultImg} alt="Demo Game 1 Logo" style={{width:'100%'}}></img></td>
-                                <td>Demo Game 1</td>
-                                <td>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, numquam repellendus perspiciatis cupiditate veritatis porro quod eveniet animi perferendis molestias debitis temporibus, asperiores iusto.                    </td>
+                                <td>{game.title}</td>
+                                <td>{game.description}</td>
                                 <td>
-                                    <a href="detail-games.html" className="btn btn-sm btn-primary">Detail</a>
+                                    <Link to={`/detail-game/${game.slug}`} className="btn btn-sm btn-primary">Detail</Link>
                                     <a href="manage-games-form-update.html" className="btn btn-sm btn-secondary">Update</a>
-                                    <a href="#" className="btn btn-sm btn-danger">Delete</a>
+                                    <button className="btn btn-sm btn-danger">Delete</button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td><img src={defaultImg} alt="Demo Game 2 Logo" style={{width:'100%'}}></img></td>
-                                <td>Demo Game 2</td>
-                                <td>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, numquam repellendus perspiciatis cupiditate veritatis porro quod eveniet animi perferendis molestias debitis temporibus, asperiores iusto.                    </td>
-                                <td>
-                                    <a href="detail-games.html" className="btn btn-sm btn-primary">Detail</a>
-                                    <a href="manage-games-form-update.html" className="btn btn-sm btn-secondary">Update</a>
-                                    <a href="#" className="btn btn-sm btn-danger">Delete</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img src={defaultImg} alt="Demo Game 3 Logo" style={{width:'100%'}}></img></td>
-                                <td>Demo Game 3</td>
-                                <td>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, numquam repellendus perspiciatis cupiditate veritatis porro quod eveniet animi perferendis molestias debitis temporibus, asperiores iusto.                    </td>
-                                <td>
-                                    <a href="detail-games.html" className="btn btn-sm btn-primary">Detail</a>
-                                    <a href="manage-games-form-update.html" className="btn btn-sm btn-secondary">Update</a>
-                                    <a href="#" className="btn btn-sm btn-danger">Delete</a>
-                                </td>
-                            </tr>
+                           ))}
                         </tbody>
                     </table>
 

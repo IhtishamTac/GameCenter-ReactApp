@@ -21,6 +21,7 @@ const DetailGamePage = lazy(() => import('./pages/user/DetailGame'));
 const ProfilePage = lazy(() => import('./pages/user/ProfilePage'));
 
 const ManageGames = lazy(() => import('./pages/user/ManageGames'));
+const AddGame = lazy(() => import('./pages/user/AddGame'));
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
 
         <Route path='/profile/:username' element={<ProfilePage />} />
         <Route path='/manage-games' element={<ManageGames />} />
+        <Route path='/add-game' element={<AddGame />} />
       </Routes>
     </Suspense>
   );

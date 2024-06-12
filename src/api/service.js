@@ -111,6 +111,37 @@ const getProfile = (token, username) => {
   });
 }
 
+const getCreatedGames = (token) => {
+  return instance.get(`createdGames`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
+
+const addGame = (token, title, description) => {
+  const data = { title, description };
+  return instance.post('games', data, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
+
+const uploadGame = (token, thumbnail, zipfile, slug) => {
+  const formData = new FormData();
+  formData.append('thumbnail', thumbnail);
+  formData.append('zipfile', zipfile);
+  formData.append('token', token);
+
+  return instance.post(`games/${slug}/upload`, formData, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data',
+    }
+  });
+}
+
 const Services = {
   signout,
   getadmins,
@@ -123,7 +154,10 @@ const Services = {
   discoverGames,
   detailGame,
   getScore,
-  getProfile
+  getProfile,
+  getCreatedGames,
+  addGame,
+  uploadGame
 }
 
 export default Services;    

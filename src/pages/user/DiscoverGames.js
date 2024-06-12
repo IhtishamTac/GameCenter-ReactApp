@@ -3,6 +3,18 @@ import Services from '../../api/service';
 import defaultImg from '../../asset/example_game/v1/thumbnail.png';
 import { Link } from 'react-router-dom';
 import { NavComp } from '../../components/NavComp';
+
+const getThumbnailSrc = (game, defaultImg) => {
+    if (Array.isArray(game.thumbnail) && game.thumbnail.length > 0) {
+        if (game.thumbnail[0]) {
+            return "http://127.0.0.1:8000/" + game.thumbnail[0];
+        } else if (game.thumbnail[1]) {
+            return "http://127.0.0.1:8000/" + game.thumbnail[1];
+        }
+    }
+    return defaultImg;
+};
+
 const DiscoverGames = () => {
     const token = localStorage.getItem('token');
     const [games, setGames] = useState([]);
@@ -121,7 +133,7 @@ const DiscoverGames = () => {
                                     <div className="card-body">
                                         <div className="row">
                                             <div className="col-4">
-                                                <img src={defaultImg} alt="Demo Game 1 Logo" style={{ width: '100%' }}></img>
+                                                <img src={getThumbnailSrc(game, defaultImg)} alt="Demo Game 1 Logo" style={{ width: '180px', height:'180px', objectFit:'cover' }}></img>
                                             </div>
                                             <div className="col">
                                                 <h5 className="mb-1">{game.title} <small className="text-muted">By {game.author}</small></h5>
